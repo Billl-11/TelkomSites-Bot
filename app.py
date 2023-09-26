@@ -215,7 +215,7 @@ def register():
         username = data.get('username')
         password = data.get('password')
 
-        print(username, password)
+        # print(username, password)
         timestamp = datetime.datetime.now()
         input_new_user(username, password, timestamp)
         success_message = "Registration successful. You can now log in."
