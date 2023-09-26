@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" href="{{ url_for('static', filename='assets/logo_3.png') }}" type="image/png">
+    <title>TelkomBot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="styles/style_chat.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#Fcfcfc] bg-opacity-100 backdrop-blur-lg rounded">
+    <section class="chat-section">
+        <nav class="bg-white border-gray-200 dark:bg-gray-900">
+            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <button data-collapse-toggle="navbar-cta" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-cta" aria-expanded="false" onclick="toggleHistory()">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+                </svg>
+            </button>
+            <a href="/" class="flex items-center">
+                <img src="{{ url_for('static', filename='assets/logo_3.png') }}" class="h-8 mr-3" alt="Flowbite Logo" />
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">TelkomBot</span>
+            </a>
+            <div class="flex md:order-2">
+                <a href="{{ url_for('logout') }}" class="logout-button text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-red-500 dark:hover:bg-red-700 dark:focus:ring-red-800">Logout</a>
+                <!-- <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Get started</button> -->
+            </div>
+                <!-- <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
+                    <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                        <li>
+                            <a href="#" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
+                        </li>
+                    </ul>
+                </div> -->
+            </div>
+        </nav>
+
+        <div class="wrapper gap-5">
+            <div id="history" class="history">
+                <div class="py-5 ml-3 flex flex-row">
+                    <span class="material-symbols-outlined mx-2">
+                        account_circle
+                    </span>
+                    <p>Hello, {{ username }}!</p>
+                </div>
+                <div class="mb-5 ml-4 flex flex-row">
+                    <a href="{{ url_for('home') }}">
+                        <span class="bg-[#Ffd5cf] py-3 w-full rounded-[2rem] flex flex-row shadow-md shadow-[#FCE2E2]">
+                            <p class="pl-5">New Chat</p>
+                            <span class="material-symbols-outlined pr-5">
+                            add
+                            </span>
+                        </span>
+                    </a>
+                </div>
+                <div class="ml-5 mb-1 flex flex-row text-sm text-gray-400">
+                    <p>Recent Chat</p>
+                </div>
+                <div class="overlay-content">
+                    <ul id="item-list" class="item">
+                        {% for topic in topics[::-1] %}
+                        <li>
+                            <a href="{{ url_for('home') }}/{{ topic_id }}" class="topic-link flex flex-row" data-topic="{{ topic.topic_id }}">
+                                <span class="material-symbols-outlined mr-1">
+                                    sms
+                                </span>
+                                <div class="list-content overflow-hidden whitespace-normal md:whitespace-nowrap truncate text-sm mt-[1px]">
+                                    {{ topic.title }}
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <script>
+                    const historyContainer = document.getElementById('history-container');
+                    const itemList = document.getElementById('item-list');
+
+                    historyContainer.addEventListener('click', () => {
+                        itemList.scrollTop = itemList.scrollHeight;
+                    });
+                </script>
+            </div>
+            <div class="chatbox shadow-2xl shadow-[#FCE6E2]">
+                <!-- <img src="https://storage-dev.myindibiz.co.id/ewz-indibiz-pub-dev/images/loading-dots.gif" class="chakra-image css-k3wu6e"> -->
+                <div class="output bg-[#FCF3F3] mb-2" id="output">
+                    <!-- Chat messages will be inserted here -->
+                    <div class="loading" id="loading">
+                        <!-- Loading message will be inserted here -->
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <div class="input-container">
+                        <!-- <input type="text" id="prompt" placeholder="Type your message...">
+                        <button onclick="gpt()">Send</button> -->
+                        <textarea id="prompt" placeholder="Type your message..." rows="1" onkeydown="handleKeyPress(event)" oninput="adjustTextareaHeight()"></textarea>
+                        <span class="send-button material-symbols-outlined mr-[2px]" onclick="gpt()">
+                            send    
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let fetchInProgress = false;
+        let topicId;
+
+        function gpt(clickedTopicId) {
+            if (fetchInProgress) {
+                return; // Prevent multiple clicks while fetch is in progress
+            }
+
+            const prompt = document.getElementById('prompt').value;
+            const outputElement = document.getElementById('output');
+            const loadingElement = document.getElementById('loading');
+            const sendButton = document.querySelector('.send-button');
+            
+            // Show the loading animation
+            // loadingElement.style.display = 'block';
+
+            // Disable the send button
+            sendButton.disabled = true;
+
+            const userPrompt = 
+            `<div class="flex flex-row">
+                <img src="{{ url_for('static', filename='assets/user.png') }}" class="pr-3 pt-1 h-[35px] sm:h-[45px]">
+                <div class="message-wrapper">
+                    <p class="user-prompt">
+                        ${prompt}
+                    </p>
+                </div>
+            </div>`;
+            outputElement.innerHTML += userPrompt;
+
+            const loadingMessage = 
+            `<div class="message-wrapper">
+                <p class="loading-text"><img src="https://storage-dev.myindibiz.co.id/ewz-indibiz-pub-dev/images/loading-dots.gif" class="chakra-image css-k3wu6e" style="height:36px;">
+                </p>
+            </div>`;
+            outputElement.innerHTML += loadingMessage;
+
+            // Set a timeout duration (in milliseconds)
+            const timeoutDuration = 60000; // 30 seconds
+
+            // Create a promise that resolves after the timeout duration
+            const timeoutPromise = new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({ error: 'Request timed out, please try again' });
+                }, timeoutDuration);
+            });
+
+            Promise.race([
+                fetch('/gpt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 'text': prompt, 'clicked_topic_id': clickedTopicId }),
+                    // body: JSON.stringify({ 'text': prompt }),
+                }),
+                timeoutPromise
+            ])
+            .then(response => {
+                if (!response.ok) {
+                    // loadingElement.style.display = 'none';
+                    sendButton.disabled = false; // Re-enable the send button
+                    const noResponse = 'there is a problem, regenerate again';
+                    throw new Error(noResponse);
+                    
+                }
+                return response.json();
+            })
+            // .then(response => response.json())
+            .then(data => {
+
+                // Remove the loading message
+                const loadingMessage = outputElement.querySelector('.loading-text');
+                if (loadingMessage) {
+                    loadingMessage.remove();
+                }
+
+                // Assume you have fetched and parsed your JSON response into the 'data' object
+                if ('model_response' in data) {
+                    // Replace \n with <br> and escape HTML entities
+                    const APIResponse = data.model_response.replace(/\n/g, '<br>');
+
+                    // Create a new <div> element to hold the content
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('flex', 'flex-row');
+
+                    // Construct the content with the formattedResponse
+                    messageDiv.innerHTML = `
+                        <img src="{{ url_for('static', filename='assets/bot.png') }}" class="pr-3 pt-3.5 h-[44px] sm:h-[54px]">
+                        <div class="message-wrapper">
+                            <p class="model-response flex flex-row">
+                                ${APIResponse}
+                            </p>
+                        </div>
+                    `;
+
+                    // Append the constructed content to your output element
+                    outputElement.appendChild(messageDiv);
+
+
+                } else if ('error' in data) {
+                    const errorResponse = `
+                    <div class="message-wrapper flex">
+                        <p class="error-message mr-2">
+                            Error: ${data.error}
+                        </p>
+                        <a href="{{ url_for('home') }}" class="px-10 py-5">
+                            <span class="bg-[#FFD0D0] py-3 w-full rounded-[2rem] flex flex-row shadow-md shadow-[#FCE2E2]">
+                                <p class="pl-5">New Chat</p>
+                                <span class="material-symbols-outlined pr-5">
+                                add
+                                </span>
+                            </span>
+                        </a>
+                    </div>`;
+                    outputElement.innerHTML += errorResponse;
+                }
+
+            // Hide the loading animation
+            // loadingElement.style.display = 'none';
+
+            // Re-enable the send button
+            sendButton.disabled = false;
+
+            })
+            .catch(error => {
+                const errorMessage = `Error: ${error.message}`;
+                outputElement.innerHTML += `<div class="message-wrapper"><p class="error-message">${errorMessage}</p></div>`;
+                // outputElement.innerHTML += errorResponse;
+
+                // Hide the loading animation
+                // loadingElement.style.display = 'none';
+
+                // Re-enable the send button
+                sendButton.disabled = false;
+            });
+
+            document.getElementById('prompt').value = ''; // Clear the input field after sending the prompt
+
+            // After sending, reset textarea height to default
+            const textarea = document.getElementById('prompt');
+            textarea.style.height = 'auto';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault(); // Prevent the default newline behavior
+                gpt(); // Call the gpt() function when Enter key is pressed
+            }
+        }
+        window.onbeforeunload = function () {
+            fetch('/gpt', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+            body: JSON.stringify({ 'refresh': true }), // Use boolean value instead of a string
+            });
+        };
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+            
+            let fetchInProgress = false;
+            let topicId;
+
+            // Extract topic_id from the current URL
+            const pathSegments = window.location.pathname.split('/');
+            const topicIdFromURL = pathSegments[pathSegments.length - 1];
+
+            // Load conversation using topic_id from URL
+            if (topicIdFromURL) {
+                topicId = topicIdFromURL;
+                loadConversation(topicId);
+            }
+
+            $(".topic-link").click(function(e) {
+                e.preventDefault();
+                topicId = $(this).data("topic");
+                
+                var newUrl = window.location.protocol + "//" + window.location.host + "/" + topicId;
+                history.pushState(null, null, newUrl);
+
+                loadConversation(topicId);
+            });
+
+            // // Send button click event
+            // $(".send-button").click(function() {
+            //     gpt();
+            // });
+
+            // Load conversation using AJAX function
+            function loadConversation(topicId) {
+                $.ajax({
+                    type: "GET",
+                    url: "/get_conversation/" + topicId,
+                    success: function(data) {
+                        $("#loading").hide();
+                        $("#output").empty();
+
+                        // data.reverse();
+
+                        // Display conversation for the selected topic_id
+                        data.forEach(item => {
+                            const userMessage = `<div class="flex flex-row">
+                                                    <img src="{{ url_for('static', filename='assets/user.png') }}" class="pr-3 pt-1 h-[35px] sm:h-[45px]">
+                                                    <div class="message-wrapper">
+                                                        <p class="user-prompt">
+                                                            ${item.user_msg}
+                                                        </p>
+                                                    </div>
+                                                </div>`;
+                            const botMessage = `<div class="flex flex-row">
+                                                    <img src="{{ url_for('static', filename='assets/bot.png') }}" class="pr-3 pt-3.5 h-[44px] sm:h-[54px]">
+                                                    <div class="message-wrapper">
+                                                        <p class="model-response flex flex-row">
+                                                            ${item.bot_msg.replace(/\n/g, '<br>')}
+                                                        </p>
+                                                    </div>
+                                                </div>`;
+                            $("#output").append(userMessage);
+                            $("#output").append(botMessage);
+                        });
+
+                        // Scroll to the bottom of the chatbox
+                        $("#output").scrollTop($("#output")[0].scrollHeight);
+                    }
+                });
+            }
+            
+            // JavaScript code to handle clicked_topic_id
+            const topicLinks = document.querySelectorAll('.topic-link');
+
+            topicLinks.forEach(topicLink => {
+                topicLink.addEventListener('click', () => {
+                    const clickedTopicId = topicLink.getAttribute('data-topic');
+                    gpt(clickedTopicId); // Pass clickedTopicId to the gpt() function
+                });
+            });
+        });
+
+            
+            // Load conversation on page load if topic_id is in URL
+            // var initialTopicId = window.location.pathname.split("/")[1];
+            // if (initialTopicId) {
+            //     loadConversation(initialTopicId);
+            // }
+        
+    function toggleHistory() {
+        var historyDiv = document.getElementById('history');
+        historyDiv.classList.toggle('open'); // Toggle the 'open' class
+
+        // Toggle the display property to control visibility
+        // if (historyDiv.classList.contains('open')) {
+        //     historyDiv.style.display = '1';
+        // } else {
+        //     historyDiv.style.display = '0';
+        // }
+    }
+    </script>
+    <script>
+        function adjustTextareaHeight() {
+            const textarea = document.getElementById('prompt');
+            const maxHeight = 300; // Set your desired maximum height in pixels
+            
+            textarea.style.height = 'auto'; // Reset the height to auto in case of content deletion
+            
+            // Set the height to scrollHeight, but not exceeding maxHeight
+            textarea.style.height = `${Math.min(textarea.scrollHeight, maxHeight)}px`;
+            
+            // If there is no text, reset to default height
+            if (textarea.value.trim() === '') {
+                textarea.style.height = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
