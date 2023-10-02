@@ -19,3 +19,6 @@ TelkomBot is a chatbot application that utilizes a Large Language Model (LLM) to
 ## Disclaimer
 
 TelkomBot is an independent project created for educational purposes and is not affiliated with or endorsed by Telkom Indonesia. The information provided by this application may not be accurate or up-to-date. Users are advised to verify any information obtained through this application from official sources.
+
+## Getting Started
+[https://telkombot.maulayaradhibilla.com/](https://telkombot.maulayaradhibilla.com/)
